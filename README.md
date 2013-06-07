@@ -7,7 +7,7 @@ US zipcode and city list with latitude, longitude, and timezone.
 
 The usage is pretty basic.
 
-    python process.py --shapefile shapefiles/tz_us --cities cities.csv --zipcodes zipcodes.csv --output sqlite.
+    python process.py --shapefiles shapefiles/tz_us --cities cities.csv --zipcodes zipcodes.csv --output sqlite.
     
 Notice how we don't have an extension for `shapefiles/tz_us`.  Since the timezone shapefile is composed of many individual files, omit the extension and the shapefile library will automatically load all the needed files.
 
