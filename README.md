@@ -3,6 +3,14 @@ geo-data
 
 US zipcode and city list with latitude, longitude, and timezone.
 
+## Usage
+
+The usage is pretty basic.
+
+    python process.py --shapefile shapefiles/tz_us --cities cities.csv --zipcodes zipcodes.csv --output sqlite.
+    
+For the full details, look at `python process.py --help`.
+
 ## Sources
 
 This data is compiled using the following sources:
