@@ -1,3 +1,4 @@
+import argparse
 import sqlite3 as sqlite
 import csv
 from itertools import izip
@@ -12,10 +13,23 @@ state_codes = {'AK', 'AL', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA',
 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'DC', 'WV',
 'WI', 'WY'}
 
-sf = shapefile.Reader('shapefiles/tz_us')
+# Parse arguments
+parser = argparse.ArgumentParser()
+parser.add_argument('--shapefiles', required=True,
+        help='The timezone shapefiles.  Should be the filenames sans the ' +
+            'extension.')
+parser.add_argument('--cities', required=True, help='The CSV of cities.')
+parser.add_argument('--zipcodes', required=True,
+        help='The CSV of US zipcodes.')
+parser.add_argument('--output', default='sqlite.db',
+        help='The file for sqlite to save the output to.')
+args = parser.parse_args()
+
+# Read shapefiles
+sf = shapefile.Reader(args.shapefiles)
 
 # Connect to database and create the schema`
-conn = sqlite.connect('sqlite.db')
+conn = sqlite.connect(args.output)
 conn.text_factory = str
 with open('schema.sql') as fh:
     c = conn.cursor()
@@ -23,7 +37,7 @@ with open('schema.sql') as fh:
     conn.commit()
 
 #Open up the cities CSV and start adding to the database
-with open('cities.csv') as fh:
+with open(args.cities) as fh:
     reader = csv.reader(fh)
     reader.next() #Skip first line
     c = conn.cursor()
@@ -62,7 +76,7 @@ with open('cities.csv') as fh:
     conn.commit()
 
 #Read zip codes and start adding to database
-with open('zipcodes.csv') as fh:
+with open(args.zipcodes) as fh:
     reader = csv.reader(fh)
     reader.next()
     c = conn.cursor()
@@ -105,4 +119,5 @@ with open('zipcodes.csv') as fh:
             conn.commit()
 
 print 'Done!'
+
 
