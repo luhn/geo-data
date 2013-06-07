@@ -9,7 +9,9 @@ The usage is pretty basic.
 
     python process.py --shapefile shapefiles/tz_us --cities cities.csv --zipcodes zipcodes.csv --output sqlite.
     
-For the full details, look at `python process.py --help`.
+Notice how we don't have an extension for `shapefiles/tz_us`.  Since the timezone shapefile is composed of many individual files, omit the extension and the shapefile library will automatically load all the needed files.
+
+If these instructions didn't really do it for you, there's also `python process.py --help`.
 
 ## Sources
 
