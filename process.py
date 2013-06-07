@@ -3,6 +3,7 @@ import csv
 from itertools import izip
 
 from point_in_poly import point_in_poly
+from point_to_poly import point_to_poly
 import shapefile
 
 state_codes = {'AK', 'AL', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA',
@@ -40,9 +41,16 @@ with open('cities.csv') as fh:
                 timezone = record[0]
                 break
         if not timezone:
-            print 'Could not find timezone: %s, %s' % (city, state)
-            timezone = 'US/Pacific'
-        print city, state, timezone
+            print 'Could not find timezone, trying nearby: %s, %s' % (city,
+                    state)
+            for record, shape in izip(sf.records(), sf.shapes()):
+                if point_to_poly(lng, lat, shape.points) < 0.1:
+                    timezone = record[0]
+                    print timezone
+                    break
+            if not timezone:
+                print 'NOPE!'
+                timezone = 'US/Pacific'
 
         #Save to database
         c.execute("""insert into city(city, state, lat, lng, timezone)
@@ -51,7 +59,6 @@ with open('cities.csv') as fh:
         if i % 100 == 0:
             print i
             conn.commit() #Every 100 inserts, commit changes
-            break
     conn.commit()
 
 #Read zip codes and start adding to database
@@ -79,9 +86,15 @@ with open('zipcodes.csv') as fh:
                 timezone = record[0]
                 break
         if not timezone:
-            print 'Could not find timezone: %s' % zip
-            timezone = 'US/Pacific'
-        print zip, city_id, timezone
+            print 'Could not find timezone, trying nearby: %s' % zip
+            for record, shape in izip(sf.records(), sf.shapes()):
+                if point_to_poly(lng, lat, shape.points) < 0.1:
+                    timezone = record[0]
+                    print timezone
+                    break
+            if not timezone:
+                print 'NOPE!'
+                timezone = 'US/Pacific'
 
         c.execute("""insert into zip(zip, city_id, lat, lng, timezone)
             values (?, ?, ?, ?, ?)""", (zip, city_id, lat, lng, timezone))
@@ -90,7 +103,6 @@ with open('zipcodes.csv') as fh:
         if i % 100 == 0:
             print i
             conn.commit()
-            break
 
 print 'Done!'
 
