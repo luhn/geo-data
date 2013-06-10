@@ -83,7 +83,10 @@ with open(args.zipcodes) as fh:
     i = 0
     for row in reader:
         zip, city, state = row[0], row[2].lower(), row[3].upper()
-        lat, lng = float(row[5]), float(row[6])
+        try:
+            lat, lng = float(row[5]), float(row[6])
+        except ValueError:
+            continue # Some military zip codes don't have lat and lng
 
         c2 = conn.cursor()
         city = c2.execute("""select id from city where city=? and state=?""",
