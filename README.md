@@ -13,7 +13,7 @@ Notice how we don't have an extension for `shapefiles/tz_us`.  Since the timezon
 
 If these instructions didn't really do it for you, there's also `python process.py --help`.
 
-Note that this is a very resource-intensive script (O(m*n)), and will take quite a while to complete.  And because it's written in Python, GIL will prevent it from using more than a single core.
+Note that this is a very resource-intensive script (O(m*n)), and will take quite a while to complete.  (Two days on an AWS Medium EC2 instance I spun up.)  And because it's written in Python, GIL will prevent it from using more than a single core.
 
 ## Sources
 
