@@ -3,7 +3,7 @@ geo-data
 
 US zipcode and city list with latitude, longitude, and timezone.
 
-[Download](http://downloads.luhn.com/geo-data.zip) [.zip, 2.5MB, contains two .csv files]
+[Download](https://github.com/luhn/geo-data/releases/download/2013.6/geo-data.zip) [.zip, 2.5MB]
 
 ## Usage
 
